@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jay Reardon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d0f;
+      --surface:   #141417;
+      --border:    #222228;
+      --muted:     #555566;
+      --text:      #e8e8f0;
+      --sub:       #9090a8;
+      --accent:    #7a9a3a;
+      --accent-hover: #68852e;
+      --nav-bg:    rgba(13,13,15,0.85);
+      --radius:    12px;
+    }
+
+    [data-theme="light"] {
+      --bg:        #f6f6f3;
+      --surface:   #ffffff;
+      --border:    #e2e2dc;
+      --muted:     #b0b0a8;
+      --text:      #18181c;
+      --sub:       #6a6a7a;
+      --accent:    #5e7a20;
+      --accent-hover: #4d6618;
+      --nav-bg:    rgba(246,246,243,0.85);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .nav-logo {
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--sub);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── Hero ── */
+    #hero {
+      padding: 96px 0 72px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    /* Avatar */
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7a9a3a 0%, #9ab84e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 1px rgba(122,154,58,0.3), 0 8px 32px rgba(122,154,58,0.15);
+    }
+
+    .hero-text h1 {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .hero-text .role {
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .hero-text .bio {
+      color: var(--sub);
+      font-size: 15px;
+      max-width: 500px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+    }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--sub);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+
+    /* ── Section shared ── */
+    section {
+      padding: 64px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px;
+    }
+
+    /* ── Projects ── */
+    .projects-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .project-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .project-name {
+      font-weight: 500;
+      font-size: 15px;
+      color: var(--text);
+    }
+    .project-arrow {
+      color: var(--muted);
+      font-size: 16px;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .project-card:hover .project-arrow {
+      color: var(--accent);
+      transform: translate(2px, -2px);
+    }
+    .project-desc {
+      color: var(--sub);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .project-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: rgba(122,154,58,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(122,154,58,0.2);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Contact ── */
+    #contact { border-bottom: none; }
+    .contact-intro {
+      color: var(--sub);
+      margin-bottom: 32px;
+      font-size: 15px;
+    }
+    .contact-intro a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .contact-intro a:hover { text-decoration: underline; }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--sub);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    input, textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      padding: 10px 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      resize: none;
+      width: 100%;
+    }
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+    input:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(122,154,58,0.12);
+    }
+    textarea { min-height: 120px; }
+
+    .form-submit {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 4px;
+    }
+    #form-status {
+      font-size: 13px;
+      color: var(--sub);
+      display: none;
+    }
+    #form-status.success { color: #4ade80; display: block; }
+    #form-status.error   { color: #f87171; display: block; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 40px 0;
+      text-align: center;
+    }
+    footer p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--sub);
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover {
+      color: var(--text);
+      border-color: var(--muted);
+      background: var(--surface);
+    }
+    .theme-toggle svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    /* show correct icon per theme */
+    .icon-moon { display: block; }
+    .icon-sun  { display: none; }
+    [data-theme="light"] .icon-moon { display: none; }
+    [data-theme="light"] .icon-sun  { display: block; }
+
+    /* ── Global transition for theme switch ── */
+    body, nav, input, textarea, .project-card {
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 520px) {
+      #hero { padding: 64px 0 48px; }
+      .hero-text h1 { font-size: 26px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container">
+      <a class="nav-logo" href="#">Jay Reardon</a>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <!-- Moon (shown in dark mode) -->
+          <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <!-- Sun (shown in light mode) -->
+          <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="avatar">JR</div>
+        <div class="hero-text">
+          <h1>Jay Reardon</h1>
+          <p class="role">Principal Solutions Architect · Expel</p>
+          <p class="bio">
+            I help organizations build and scale their security operations. Focused on translating complex security challenges into practical, people-first solutions — bridging the gap between technical depth and business impact.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#contact">Get in touch</a>
+          <a class="btn btn-ghost" href="#projects">View projects</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="container">
+      <p class="section-label">Projects</p>
+      <div class="projects-grid">
+
+        <a class="project-card" href="#" target="_blank" rel="noopener">
+          <div class="project-header">
+            <span class="project-name">Project One</span>
+            <span class="project-arrow">↗</span>
+          </div>
+          <p class="project-desc">A short description of this project — what it does, the problem it solves, and who it's for. Replace this with your real project.</p>
+          <div class="project-tags">
+            <span class="tag">Security</span>
+            <span class="tag">Automation</span>
+          </div>
+        </a>
+
+        <a class="project-card" href="#" target="_blank" rel="noopener">
+          <div class="project-header">
+            <span class="project-name">Project Two</span>
+            <span class="project-arrow">↗</span>
+          </div>
+          <p class="project-desc">Another project worth highlighting. Describe the impact, the technology, or the outcome. Keep it punchy and specific.</p>
+          <div class="project-tags">
+            <span class="tag">Architecture</span>
+            <span class="tag">Cloud</span>
+          </div>
+        </a>
+
+        <a class="project-card" href="#" target="_blank" rel="noopener">
+          <div class="project-header">
+            <span class="project-name">Project Three</span>
+            <span class="project-arrow">↗</span>
+          </div>
+          <p class="project-desc">A third project — perhaps a tool, a writeup, a talk, or an initiative. Link it to a GitHub repo, a blog post, or anywhere else it lives.</p>
+          <div class="project-tags">
+            <span class="tag">Detection</span>
+            <span class="tag">SIEM</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label">Contact</p>
+      <p class="contact-intro">
+        Got a question, a project idea, or just want to say hello? Drop a note below or email me directly at
+        <a href="mailto:jay.reardon@expel.com">jay.reardon@expel.com</a>.
+      </p>
+
+      <form id="contact-form" action="mailto:jay.reardon@expel.com" method="POST" enctype="text/plain">
+        <div class="form-row">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required />
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" placeholder="What's this about?" />
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Your message…" required></textarea>
+        </div>
+        <div class="form-submit">
+          <button type="submit" class="btn btn-primary">Send message →</button>
+          <span id="form-status"></span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>© 2026 Jay Reardon</p>
+    </div>
+  </footer>
+
+  <script>
+    // ── Theme toggle ──
+    const html = document.documentElement;
+    const toggleBtn = document.getElementById('theme-toggle');
+
+    // Respect saved preference, else default to dark
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light') html.setAttribute('data-theme', 'light');
+
+    toggleBtn.addEventListener('click', () => {
+      const isLight = html.getAttribute('data-theme') === 'light';
+      html.setAttribute('data-theme', isLight ? 'dark' : 'light');
+      localStorage.setItem('theme', isLight ? 'dark' : 'light');
+    });
+
+    // ── Smooth active-link highlighting ──
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => {
+            a.style.color = a.getAttribute('href') === '#' + entry.target.id
+              ? 'var(--text)'
+              : '';
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+
+    // Simple mailto form handler
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      const status = document.getElementById('form-status');
+      status.textContent = 'Opening your mail client…';
+      status.className = 'success';
+      setTimeout(() => { status.textContent = ''; status.className = ''; }, 4000);
+    });
+  </script>
+</body>
+</html>
